@@ -5,10 +5,12 @@
 class Layer {
 	private:
 		std::vector<Stroke> strokes;
+		RenderTexture renderTexture;
 	public:
-		Layer();
+		Layer(int width, int height);
 		void drawStroke(Stroke stroke);
 		void removeLastStroke();
 		void clearStrokes();
+		void updateRenderTexture();
 		void render();
 };

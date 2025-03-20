@@ -9,8 +9,8 @@ const int WINDOW_HEIGHT = 720;
 const char* WINDOW_TITLE = "";
 
 // Layers
-std::vector<Layer> layers = { Layer() };
-int currLayerIdx = 0;
+std::vector<Layer> layers;
+int currLayerIdx;
 
 // User State
 Stroke userStroke;
@@ -70,24 +70,29 @@ int main() {
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
 	SetTargetFPS(120);
 
+	layers.push_back(Layer(WINDOW_WIDTH, WINDOW_HEIGHT));
+	currLayerIdx = 0;
+
 	buttonsGUI.addButton("pen", &isPen);
 	buttonsGUI.addButton("eraser", &isEraser);
 	buttonsGUI.addButton("fill", &isFill);
 
 	while (!WindowShouldClose()) {
+		// Updates
 		handleKeyboardShortcuts();
 		updateCurrentLayer();
 		buttonsGUI.updateButtons();
 
+		// All Rndering
+		for (Layer layer : layers)
+			layer.updateRenderTexture();
 		BeginDrawing();
 		ClearBackground(WHITE);
 
 		for (Layer layer : layers)
 			layer.render();
 		userStroke.render();
-
 		buttonsGUI.render();
-
 		EndDrawing();
 	}
 	CloseWindow();
