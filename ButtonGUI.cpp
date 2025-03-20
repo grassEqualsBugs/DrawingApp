@@ -7,9 +7,15 @@ ButtonGUI::ButtonGUI(int buttonSize, int iconSize, int buttonMargin) {
 	ButtonGUI::buttonMargin = buttonMargin;
 }
 
+ButtonGUI::~ButtonGUI() {
+	for (int i = 0; i < iconTextures.size(); i++) {
+		UnloadTexture(iconTextures[i]);
+	}
+}
+
 void ButtonGUI::addButton(std::string name, bool* buttonBool) {
 	buttons.push_back({name, buttonBool});
-	Image iconIMG = LoadImage((std::string("icons/")+name+std::string(".png")).c_str());
+	Image iconIMG = LoadImage((std::string("icons/") + name + std::string(".png")).c_str());
 	ImageResize(&iconIMG, iconSize, iconSize);
 	iconTextures.push_back(LoadTextureFromImage(iconIMG));
 	UnloadImage(iconIMG);
