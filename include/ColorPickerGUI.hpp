@@ -7,8 +7,8 @@ class ColorPickerGUI {
 	    int size;
 	    Vector2 position;
 	    ColorWheelGUI colorWheel;
-	    Color selectedColor;
+		Color selectedColor;
 	public:
-	    ColorPickerGUI(int size, Vector2 position, Color initialColor);
+	    ColorPickerGUI(int size, Vector2 position, Color intialColor);
 	    void render();
 };
