@@ -12,8 +12,9 @@ class ButtonGUI {
 		int buttonSize;
 		int iconSize;
 		int buttonMargin;
+		int screenHalfway;
 	public:
-		ButtonGUI(int buttonSize, int iconSize, int buttonMargin);
+		ButtonGUI(int buttonSize, int iconSize, int buttonMargin, int screenHalfway);
 		~ButtonGUI();
 		void updateButtons();
 		void addButton(std::string name, bool* buttonBool);

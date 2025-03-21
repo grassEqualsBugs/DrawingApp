@@ -2,6 +2,7 @@
 #include "include/raylib.h"
 #include "include/Stroke.hpp"
 #include "include/Layer.hpp"
+#include "include/ColorPickerGUI.hpp"
 #include <vector>
 
 const int WINDOW_WIDTH = 1280;
@@ -25,7 +26,7 @@ int eraserThickness = 30;
 Brush currentBrush(brushThickness, BLACK);
 
 // Buttons GUI
-ButtonGUI buttonsGUI(64, 40, 10);
+ButtonGUI buttonsGUI(64, 40, 10, WINDOW_HEIGHT / 2);
 
 void handleKeyboardShortcuts() {
 	if (IsKeyPressed(KEY_E)) { // eraser
@@ -70,28 +71,30 @@ int main() {
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
 	SetTargetFPS(120);
 
+	ColorPickerGUI colorPickerGUI(50, (Vector2){(float)WINDOW_WIDTH / 2, (float)WINDOW_HEIGHT / 2}, RED);
+
 	layers.push_back(Layer(WINDOW_WIDTH, WINDOW_HEIGHT));
 	currLayerIdx = 0;
 
 	buttonsGUI.addButton("pen", &isPen);
 	buttonsGUI.addButton("eraser", &isEraser);
-	buttonsGUI.addButton("fill", &isFill);
+	// buttonsGUI.addButton("fill", &isFill);
 
 	while (!WindowShouldClose()) {
-		// Updates
+		// --- UPDATES --- //
 		handleKeyboardShortcuts();
 		updateCurrentLayer();
 		buttonsGUI.updateButtons();
 
-		// All Rndering
+		// --- RENDERING --- //
 		for (Layer layer : layers)
 			layer.updateRenderTexture();
 		BeginDrawing();
 		ClearBackground(WHITE);
-
 		for (Layer layer : layers)
 			layer.render();
 		userStroke.render();
+		colorPickerGUI.render();
 		buttonsGUI.render();
 		EndDrawing();
 	}

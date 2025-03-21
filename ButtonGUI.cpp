@@ -1,10 +1,11 @@
 #include "include/ButtonGUI.hpp"
 #include "include/raylib.h"
 
-ButtonGUI::ButtonGUI(int buttonSize, int iconSize, int buttonMargin) {
+ButtonGUI::ButtonGUI(int buttonSize, int iconSize, int buttonMargin, int screenHalfway) {
 	ButtonGUI::buttonSize = buttonSize;
 	ButtonGUI::iconSize = iconSize;
 	ButtonGUI::buttonMargin = buttonMargin;
+	ButtonGUI::screenHalfway = screenHalfway;
 }
 
 ButtonGUI::~ButtonGUI() {
@@ -26,7 +27,7 @@ void ButtonGUI::updateButtons() {
 		buttonMargin * (buttons.size() + 1);
 	for (int i = 0; i < buttons.size(); i++) {
 		float x = 20.f + (float)buttonMargin/2;
-		float y = (float)(360 - totalSize/2 + buttonMargin + (buttonSize + buttonMargin) * i);
+		float y = (float)(screenHalfway - totalSize/2 + buttonMargin + (buttonSize + buttonMargin) * i);
 		Rectangle buttonRec = (Rectangle){x, y, (float)buttonSize, (float)buttonSize};
 		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), buttonRec)) {
 			for (int j = 0; j < buttons.size(); j++) {
@@ -41,11 +42,11 @@ void ButtonGUI::render() {
 	float totalSize = buttonSize * buttons.size() +
 		buttonMargin * (buttons.size() + 1);
 	DrawRectangleRounded(
-		(Rectangle){15.f, (float)(360 - totalSize/2), (float)(buttonSize + buttonMargin) + 10, totalSize},
+		(Rectangle){15.f, (float)(screenHalfway - totalSize/2), (float)(buttonSize + buttonMargin) + 10, totalSize},
 		0.8, 20, (Color){130,130,130,255});
 	for (int i = 0; i < buttons.size(); i++) {
 		float x = 20.f + (float)buttonMargin/2;
-		float y = (float)(360 - totalSize/2 + buttonMargin + (buttonSize + buttonMargin) * i);
+		float y = (float)(screenHalfway - totalSize/2 + buttonMargin + (buttonSize + buttonMargin) * i);
 		Rectangle buttonRec = (Rectangle){x, y, (float)buttonSize, (float)buttonSize};
 		DrawRectangleRounded(buttonRec, 0.8, 20, *buttons[i].second ?  (Color){75,75,75,255} : (Color){100,100,100,255});
 		if (*buttons[i].second || CheckCollisionPointRec(GetMousePosition(), buttonRec)) {

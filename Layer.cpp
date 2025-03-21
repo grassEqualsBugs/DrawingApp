@@ -30,8 +30,8 @@ void Layer::updateRenderTexture() {
 void Layer::render() {
 	DrawTextureRec(
 	    renderTexture.texture,
-	    (Rectangle){ 0, 0, (float)renderTexture.texture.width, -(float)renderTexture.texture.height },
-	    (Vector2){ 0, 0 },
+	    (Rectangle){0, 0, (float)renderTexture.texture.width, -(float)renderTexture.texture.height},
+	    (Vector2){0, 0},
 	    WHITE
 	);
 }
