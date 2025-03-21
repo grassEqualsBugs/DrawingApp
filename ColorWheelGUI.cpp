@@ -74,7 +74,7 @@ void ColorWheelGUI::generateColorWheelTexture() {
 	for (float theta = 0; theta < 2*PI; theta += 0.001) {
 		for (int radius = (float)width/3; radius < (float)9*width/20; radius++) {
 			int x = center.x + cos(theta)*(radius);
-     		int y = center.y + sin(theta)*(radius);
+     		int y = center.y - sin(theta)*(radius);
 			ImageDrawPixel(&img, x, y, hsvToRGB(theta*180/PI, 1, 1));
 		}
 	}
