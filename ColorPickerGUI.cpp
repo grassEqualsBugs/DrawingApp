@@ -1,7 +1,7 @@
 #include "include/ColorPickerGUI.hpp"
 
 ColorPickerGUI::ColorPickerGUI(int size, Vector2 position, Color initialColor)
-    : size(size), position(position), selectedColor(initialColor), colorWheel(size*4, size*4, position, &selectedColor) {}
+    : size(size), position(position), selectedColor(initialColor), colorWheel(size*4, size*4, position, initialColor) {}
 
 void ColorPickerGUI::render() {
     DrawRectangle(position.x, position.y, size, size, selectedColor);

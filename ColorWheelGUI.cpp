@@ -1,8 +1,6 @@
 #include "include/ColorWheelGUI.hpp"
-#include <cmath>
-#include <algorithm>
 
-ColorWheelGUI::ColorWheelGUI(int width, int height, Vector2 position, Color* color)
+ColorWheelGUI::ColorWheelGUI(int width, int height, Vector2 position, Color color)
     : width(width), height(height), position(position), color(color)  {
     generateColorWheelTexture();
     generateSquareTexture();
@@ -34,37 +32,39 @@ Color hsvToRGB(float h, float s, float v) {
         static_cast<unsigned char>(r * 255),
         static_cast<unsigned char>(g * 255),
         static_cast<unsigned char>(b * 255),
-        255
+        static_cast<unsigned char>(255)
     };
 }
 
-// Convert RGB (0-255) to HSV (0-360, 0-1, 0-1)
-void rgbToHSV(unsigned char r, unsigned char g, unsigned char b, float &h, float &s, float &v) {
-    float rf = (float)static_cast<int>(r) / 255.0f;
-    float gf = (float)static_cast<int>(g) / 255.0f;
-    float bf = (float)static_cast<int>(b) / 255.0f;
-
-    float maxVal = std::max({rf, gf, bf});
-    float minVal = std::min({rf, gf, bf});
+std::vector<float> rgbToHSV(Color color) {
+    float r = (int)color.r / 255.0f;
+    float g = (int)color.g / 255.0f;
+    float b = (int)color.b / 255.0f;
+    float maxVal = std::max({r, g, b});
+    float minVal = std::min({r, g, b});
     float delta = maxVal - minVal;
 
-    // Compute Hue
-    if (delta == 0) {
-        h = 0;
-    } else if (maxVal == rf) {
-        h = 60 * (fmod(((gf - bf) / delta), 6));
-    } else if (maxVal == gf) {
-        h = 60 * (((bf - rf) / delta) + 2);
-    } else {
-        h = 60 * (((rf - gf) / delta) + 4);
+    float h = 0.0f, s = 0.0f, v = maxVal;
+
+    if (delta > 0.0f) {
+        if (maxVal == r) {
+            h = 60.0f * fmod(((g - b) / delta), 6);
+        } else if (maxVal == g) {
+            h = 60.0f * (((b - r) / delta) + 2);
+        } else if (maxVal == b) {
+            h = 60.0f * (((r - g) / delta) + 4);
+        }
+
+        if (maxVal > 0.0f) {
+            s = delta / maxVal;
+        }
     }
-    if (h < 0) h += 360;
 
-    // Compute Saturation
-    s = (maxVal == 0) ? 0 : (delta / maxVal);
+    if (h < 0.0f) {
+        h += 360.0f;
+    }
 
-    // Compute Value
-    v = maxVal;
+    return {h, s, v};
 }
 
 void ColorWheelGUI::generateColorWheelTexture() {
@@ -73,8 +73,8 @@ void ColorWheelGUI::generateColorWheelTexture() {
 	int radius = (float)width/3;
 	for (float theta = 0; theta < 2*PI; theta += 0.001) {
 		for (int radius = (float)width/3; radius < (float)9*width/20; radius++) {
-			int x = center.x + cos(theta)*(radius);
-     		int y = center.y - sin(theta)*(radius);
+			int x = center.x + cos(theta)*radius;
+     		int y = center.y - sin(theta)*radius;
 			ImageDrawPixel(&img, x, y, hsvToRGB(theta*180/PI, 1, 1));
 		}
 	}
@@ -84,14 +84,13 @@ void ColorWheelGUI::generateColorWheelTexture() {
 
 void ColorWheelGUI::generateSquareTexture() {
 	Image img = GenImageColor(width, height, BLANK);
-	float currH = 0; float currS = 0; float currV = 0;
- 	rgbToHSV(color->r, color->g, color->b, currH, currS, currV);
+	std::vector<float> hsv = rgbToHSV(color);
 	Vector2 center = {(float)width/2, (float)height/2};
 	for (int x = center.x - (float)width/5; x <= center.x + (float)width/5; x++) {
 		for (int y = center.y - (float)height/5; y <= center.y + (float)height/5; y++) {
 			float normX = (x - (center.x - (float)width/5)) / ((2.0f * width) / 5);
 			float normY = (y - (center.y - (float)height/5)) / ((2.0f * height) / 5);
-			ImageDrawPixel(&img, x, y, hsvToRGB(currH, normX, 1-normY));
+			ImageDrawPixel(&img, x, y, hsvToRGB(hsv[0], normX, 1-normY));
 		}
 	}
 	squareTexture = LoadTextureFromImage(img);

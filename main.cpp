@@ -71,7 +71,7 @@ int main() {
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
 	SetTargetFPS(120);
 
-	ColorPickerGUI colorPickerGUI(50, (Vector2){WINDOW_WIDTH - 85, 60}, RED);
+	ColorPickerGUI colorPickerGUI(50, (Vector2){WINDOW_WIDTH - 85, 60}, (Color){(unsigned char)255, (unsigned char)0, (unsigned char)255, (unsigned char)255});
 
 	layers.push_back(Layer(WINDOW_WIDTH, WINDOW_HEIGHT));
 	currLayerIdx = 0;
