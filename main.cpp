@@ -85,6 +85,7 @@ int main() {
 		handleKeyboardShortcuts();
 		updateCurrentLayer();
 		buttonsGUI.updateButtons();
+		colorPickerGUI.update();
 
 		// --- RENDERING --- //
 		for (Layer layer : layers)
