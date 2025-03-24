@@ -20,7 +20,7 @@ bool isEraser = false;
 bool isFill = false;
 
 // Brush
-Color initialBrushColor = GREEN;
+Color initialBrushColor = (Color){255, 0, 0, 255};
 int brushThickness = 5;
 int eraserThickness = 30;
 Brush currentBrush(brushThickness, initialBrushColor);
@@ -69,7 +69,7 @@ int main() {
 	SetConfigFlags(FLAG_VSYNC_HINT);
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
-	SetTargetFPS(120);
+	SetTargetFPS(60);
 
 	ColorPickerGUI colorPickerGUI(50, (Vector2){WINDOW_WIDTH - 85, 60}, initialBrushColor);
 

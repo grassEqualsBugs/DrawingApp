@@ -26,7 +26,7 @@ void ColorWheelGUI::generateColorWheelTexture() {
 		for (int radius = innerRadius; radius < outerRadius; radius++) {
 			int x = center.x + cos(theta)*radius;
      		int y = center.y - sin(theta)*radius;
-			ImageDrawPixel(&img, x, y, ColorUtils::hsvToRGB(theta*180/PI, 1, 1));
+			ImageDrawPixel(&img, x, y, ColorUtils::hsvToRGB({theta*180/PI, 1, 1}));
 		}
 	}
 	colorWheelTexture = LoadTextureFromImage(img);
@@ -36,11 +36,12 @@ void ColorWheelGUI::generateColorWheelTexture() {
 void ColorWheelGUI::generateSquareTexture() {
 	Image img = GenImageColor(width, height, BLANK);
 	Vector2 center = {(float)width/2, (float)height/2};
-	for (int x = center.x - (float)width/5; x <= center.x + (float)width/5; x++) {
-		for (int y = center.y - (float)height/5; y <= center.y + (float)height/5; y++) {
-			float normX = (x - (center.x - (float)width/5)) / ((2.0f * width) / 5);
-			float normY = (y - (center.y - (float)height/5)) / ((2.0f * height) / 5);
-			ImageDrawPixel(&img, x, y, ColorUtils::hsvToRGB(hsvColor[0], normX, 1-normY));
+	float k = 5.3;
+	for (int x = center.x - (float)width/k; x <= center.x + (float)width/k; x++) {
+		for (int y = center.y - (float)height/k; y <= center.y + (float)height/k; y++) {
+			float normX = (x - (center.x - (float)width/k)) / ((2.0f * width) / k);
+			float normY = (y - (center.y - (float)height/k)) / ((2.0f * height) / k);
+			ImageDrawPixel(&img, x, y, ColorUtils::hsvToRGB({hsvColor[0], normX, 1-normY}));
 		}
 	}
 	squareTexture = LoadTextureFromImage(img);
@@ -51,14 +52,25 @@ Color ColorWheelGUI::getSelectedColor() {
 	return color;
 }
 
-void ColorWheelGUI::update() { }
+void ColorWheelGUI::update() {
+	Vector2 mousePos = GetMousePosition();
+	Vector2 center = (Vector2){-(float)width / 2 + position.x + offset.x, (float)height/2 + position.y + offset.y};
+	float distance = sqrt((center.x - mousePos.x)*(center.x - mousePos.x) + (center.y - mousePos.y)*(center.y - mousePos.y));
+	double angle = -atan2(mousePos.y - center.y, mousePos.x - center.x);
+	if (angle < 0) angle += 2*PI;
+	if (distance <= outerRadius && innerRadius <= distance && IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+		hsvColor[0] = angle * 180 / PI;
+		color = ColorUtils::hsvToRGB(hsvColor);
+		generateSquareTexture();
+	}
+}
 
 void ColorWheelGUI::render() {
 	DrawTexture(squareTexture, -(float)width + position.x + offset.x, position.y + offset.y, WHITE);
     DrawTexture(colorWheelTexture, -(float)width + position.x + offset.x, position.y + offset.y, WHITE);
 
     Vector2 center = (Vector2){-(float)width / 2 + position.x + offset.x, (float)height/2 + position.y + offset.y};
-    DrawCircleLinesV(center, innerRadius, BLACK);
+    DrawCircleLinesV(center, innerRadius - 1, BLACK);
     DrawCircleLinesV(center, outerRadius, BLACK);
     float wheelSelectorRadius = (outerRadius - innerRadius) / 2;
     float wheelSelectorPositionRadius = (outerRadius + innerRadius) / 2;
@@ -67,7 +79,7 @@ void ColorWheelGUI::render() {
     	cos(angle)*wheelSelectorPositionRadius + center.x,
     	-sin(angle)*wheelSelectorPositionRadius + center.y
     };
-    for (int thicknessChange = 0; thicknessChange < 3; thicknessChange++) {
+    for (float thicknessChange = 0; thicknessChange < 3; thicknessChange += 0.5) {
     	DrawCircleLinesV(wheelSelectorPosition, wheelSelectorRadius - thicknessChange, WHITE);
     }
 }

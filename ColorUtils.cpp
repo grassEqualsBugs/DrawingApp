@@ -1,7 +1,8 @@
 #include "include/ColorUtils.hpp"
 
 namespace ColorUtils {
-	Color hsvToRGB(float h, float s, float v) {
+	Color hsvToRGB(std::vector<float> hsv) {
+		float h = hsv[0], s = hsv[1], v = hsv[2];
 	    float r = 0, g = 0, b = 0;
 	    int hi = static_cast<int>(h / 60) % 6;
 	    float f = (h / 60.0f) - hi;

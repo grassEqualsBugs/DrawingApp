@@ -21,6 +21,8 @@ void ColorPickerGUI::update() {
 			wheelOpen = false;
 		}
 	}
+	if (wheelOpen) colorWheel.update();
+	selectedColor = colorWheel.getSelectedColor();
 }
 
 void ColorPickerGUI::render() {
@@ -28,6 +30,7 @@ void ColorPickerGUI::render() {
 	Color guiColor = (Color){125, 125, 125, 255};
 	DrawCircle(position.x + (float)size / 2, position.y + (float)size / 2, size, guiColor);
     DrawRectangleRounded(rect, 0.5, 20, selectedColor);
+    DrawRectangleRoundedLines(rect, 0.5, 20, BLACK);
     if (wheelOpen) {
     	DrawRectangleRounded(colorWheel.getColorWheelRect(), 0.5, 20, guiColor);
     	colorWheel.render();

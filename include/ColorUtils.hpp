@@ -3,6 +3,6 @@
 #include <vector>
 
 namespace ColorUtils {
-	Color hsvToRGB(float h, float s, float v);
+	Color hsvToRGB(std::vector<float> hsv);
 	std::vector<float> rgbToHSV(Color color);
 }
