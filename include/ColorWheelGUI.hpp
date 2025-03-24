@@ -16,6 +16,8 @@ class ColorWheelGUI {
 		Color color;
 		std::vector<float> hsvColor;
 		Vector2 offset;
+		float innerRadius;
+		float outerRadius;
 
 	    void generateColorWheelTexture();
 		void generateSquareTexture();
@@ -23,6 +25,8 @@ class ColorWheelGUI {
 	    ColorWheelGUI(int width, int height, Vector2 position, Vector2 offset, Color color);
 	    ~ColorWheelGUI();
 
+		void printInnerRadius();
+		Rectangle getColorWheelRect();
 		Color getSelectedColor();
 		void update();
 	    void render();

@@ -20,10 +20,10 @@ bool isEraser = false;
 bool isFill = false;
 
 // Brush
-Color brushColor = BLACK;
+Color initialBrushColor = GREEN;
 int brushThickness = 5;
 int eraserThickness = 30;
-Brush currentBrush(brushThickness, BLACK);
+Brush currentBrush(brushThickness, initialBrushColor);
 
 // Buttons GUI
 ButtonGUI buttonsGUI(64, 40, 10, WINDOW_HEIGHT / 2);
@@ -42,9 +42,9 @@ void handleKeyboardShortcuts() {
 	}
 }
 
-void updateCurrentLayer() {
+void updateCurrentLayer(Color currentColor) {
 	if (isPen) {
-		currentBrush.setColor(brushColor);
+		currentBrush.setColor(currentColor);
 		currentBrush.setSize(brushThickness);
 	} else if (isEraser) {
 		currentBrush.setColor(WHITE);
@@ -71,7 +71,7 @@ int main() {
 	InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE);
 	SetTargetFPS(120);
 
-	ColorPickerGUI colorPickerGUI(50, (Vector2){WINDOW_WIDTH - 85, 60}, (Color){(unsigned char)255, (unsigned char)0, (unsigned char)255, (unsigned char)255});
+	ColorPickerGUI colorPickerGUI(50, (Vector2){WINDOW_WIDTH - 85, 60}, initialBrushColor);
 
 	layers.push_back(Layer(WINDOW_WIDTH, WINDOW_HEIGHT));
 	currLayerIdx = 0;
@@ -83,9 +83,10 @@ int main() {
 	while (!WindowShouldClose()) {
 		// --- UPDATES --- //
 		handleKeyboardShortcuts();
-		updateCurrentLayer();
 		buttonsGUI.updateButtons();
 		colorPickerGUI.update();
+		if (!colorPickerGUI.isWheelOpen())
+			updateCurrentLayer(colorPickerGUI.getSelectedColor());
 
 		// --- RENDERING --- //
 		for (Layer layer : layers)

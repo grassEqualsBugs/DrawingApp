@@ -11,6 +11,8 @@ class ColorPickerGUI {
 		Color selectedColor;
 	public:
 	    ColorPickerGUI(int size, Vector2 position, Color intialColor);
+		bool isWheelOpen();
+		Color getSelectedColor();
 		void update();
 	    void render();
 };

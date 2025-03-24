@@ -2,6 +2,8 @@
 
 ColorWheelGUI::ColorWheelGUI(int width, int height, Vector2 position, Vector2 offset, Color color)
     : width(width), height(height), position(position), offset(offset), color(color)  {
+    innerRadius = (float)6.5*width/20;
+    outerRadius = (float)9*width/20;
     generateColorWheelTexture();
     hsvColor = ColorUtils::rgbToHSV(color);
     generateSquareTexture();
@@ -12,12 +14,16 @@ ColorWheelGUI::~ColorWheelGUI() {
     UnloadTexture(squareTexture);
 }
 
+Rectangle ColorWheelGUI::getColorWheelRect() {
+	return (Rectangle){-(float)width + position.x + offset.x, position.y + offset.y, (float)width, (float)height};
+}
+
 void ColorWheelGUI::generateColorWheelTexture() {
 	Image img = GenImageColor(width, height, BLANK);
 	Vector2 center = {(float)width/2, (float)height/2};
 	int radius = (float)width/3;
-	for (float theta = 0; theta < 2*PI; theta += 0.001) {
-		for (int radius = (float)width/3; radius < (float)9*width/20; radius++) {
+	for (float theta = 0; theta < 2*PI; theta += 0.005) {
+		for (int radius = innerRadius; radius < outerRadius; radius++) {
 			int x = center.x + cos(theta)*radius;
      		int y = center.y - sin(theta)*radius;
 			ImageDrawPixel(&img, x, y, ColorUtils::hsvToRGB(theta*180/PI, 1, 1));
@@ -50,4 +56,18 @@ void ColorWheelGUI::update() { }
 void ColorWheelGUI::render() {
 	DrawTexture(squareTexture, -(float)width + position.x + offset.x, position.y + offset.y, WHITE);
     DrawTexture(colorWheelTexture, -(float)width + position.x + offset.x, position.y + offset.y, WHITE);
+
+    Vector2 center = (Vector2){-(float)width / 2 + position.x + offset.x, (float)height/2 + position.y + offset.y};
+    DrawCircleLinesV(center, innerRadius, BLACK);
+    DrawCircleLinesV(center, outerRadius, BLACK);
+    float wheelSelectorRadius = (outerRadius - innerRadius) / 2;
+    float wheelSelectorPositionRadius = (outerRadius + innerRadius) / 2;
+    float angle = PI/180*hsvColor[0];
+    Vector2 wheelSelectorPosition = (Vector2){
+    	cos(angle)*wheelSelectorPositionRadius + center.x,
+    	-sin(angle)*wheelSelectorPositionRadius + center.y
+    };
+    for (int thicknessChange = 0; thicknessChange < 3; thicknessChange++) {
+    	DrawCircleLinesV(wheelSelectorPosition, wheelSelectorRadius - thicknessChange, WHITE);
+    }
 }

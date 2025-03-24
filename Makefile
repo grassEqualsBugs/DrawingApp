@@ -2,7 +2,7 @@
 CXX := g++
 
 # Compiler Flags
-CXXFLAGS := -std=c++17
+CXXFLAGS := -std=c++17 -fsanitize=address -g
 
 # Libraries
 LDFLAGS := -L lib/
@@ -18,7 +18,7 @@ all: $(TARGET)
 
 # Linking
 $(TARGET): $(OBJS)
-	$(CXX) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
+	$(CXX) $(CXXFLAGS) $(OBJS) $(LDFLAGS) $(LDLIBS) -o $(TARGET)
 
 # Compilation
 %.o: %.cpp
