@@ -2,7 +2,7 @@
 CXX := g++
 
 # Compiler Flags
-CXXFLAGS := -std=c++17 -fsanitize=address -g
+CXXFLAGS := -std=c++17
 
 # Libraries
 LDFLAGS := -L lib/
