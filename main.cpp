@@ -20,7 +20,7 @@ bool isEraser = false;
 bool isFill = false;
 
 // Brush
-Color initialBrushColor = (Color){255, 0, 0, 255};
+Color initialBrushColor = (Color){64, 81, 153, 255};
 int brushThickness = 5;
 int eraserThickness = 30;
 Brush currentBrush(brushThickness, initialBrushColor);
