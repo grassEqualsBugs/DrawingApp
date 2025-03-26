@@ -38,7 +38,6 @@ void Layer::restart() {
 void Layer::fill(Vector2 mousePosition, Color fillColor) {
     BeginTextureMode(renderTexture);
 
-    // Get texture data as an image
     Image image = LoadImageFromTexture(renderTexture.texture);
     Color* pixels = LoadImageColors(image);
 
@@ -55,14 +54,13 @@ void Layer::fill(Vector2 mousePosition, Color fillColor) {
     }
 
     Color targetColor = pixels[y * width + x];
-    if (ColorUtils::colorEqual(targetColor, fillColor)) { // Avoid unnecessary fills
+    if (ColorUtils::colorEqual(targetColor, fillColor)) {
         UnloadImageColors(pixels);
         UnloadImage(image);
         EndTextureMode();
         return;
     }
 
-    // Implement a stack-based flood fill (iterative to avoid stack overflow)
     std::stack<Vector2> stack;
     stack.push({(float)x, (float)y});
 
@@ -84,10 +82,8 @@ void Layer::fill(Vector2 mousePosition, Color fillColor) {
         stack.push({(float)px, (float)(py - 1)});
     }
 
-    // Update texture with modified image
     UpdateTexture(renderTexture.texture, pixels);
 
-    // Cleanup
     UnloadImageColors(pixels);
     UnloadImage(image);
 

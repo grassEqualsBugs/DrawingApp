@@ -7,7 +7,7 @@
 
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
-const char* WINDOW_TITLE = "";
+const char* WINDOW_TITLE = "Drawing App";
 
 // Layers
 std::vector<Layer> layers;
@@ -37,7 +37,7 @@ void handleKeyboardShortcuts() {
 		isPen = true;
 		isEraser = false;
 		isFill = false;
-	} else if (IsKeyPressed(KEY_F)) {
+	} else if (IsKeyPressed(KEY_F)) { // fill
 		isFill = true;
 		isPen = false;
 		isEraser = false;
