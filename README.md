@@ -12,10 +12,12 @@ A simple, extremely lightweight drawing application designed as an alternative t
 
 1. Download the latest release.
 2. Unzip the release.
-2. Run `./DrawingApp` to start the application.
+3. Run the command 'xattr -d com.apple.quarantine DrawingApp' in the terminal to remove the quarantine attribute.
+4. Run the command 'chmod +x DrawingApp' in the terminal to make the application executable.
+5. Run `./DrawingApp` to start the application.
 
 ## Building at Home
 
 1. Download the source code.
-2. Run `make` in the root directory.
+2. Run `make` in the root directory (requires GNU make to be installed)
 3. Run `./DrawingApp` to start the application.
