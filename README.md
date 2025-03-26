@@ -11,5 +11,11 @@ A simple, extremely lightweight drawing application designed as an alternative t
 ## Installation
 
 1. Download the latest release.
-2. Run ./d
+2. Unzip the release.
+2. Run `./DrawingApp` to start the application.
 
+## Building at Home
+
+1. Download the source code.
+2. Run `make` in the root directory.
+3. Run `./DrawingApp` to start the application.
