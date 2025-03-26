@@ -32,11 +32,17 @@ void handleKeyboardShortcuts() {
 	if (IsKeyPressed(KEY_E)) { // eraser
 		isEraser = true;
 		isPen = false;
+		isFill = false;
 	} else if (IsKeyPressed(KEY_P)) { // pen
 		isPen = true;
 		isEraser = false;
+		isFill = false;
+	} else if (IsKeyPressed(KEY_F)) {
+		isFill = true;
+		isPen = false;
+		isEraser = false;
 	} else if (IsKeyPressed(KEY_R)) { // restart
-		layers[currLayerIdx].clearStrokes();
+		layers[currLayerIdx].restart();
 	} else if (IsKeyPressed(KEY_Z)) { // undo
 		layers[currLayerIdx].removeLastStroke();
 	}
@@ -49,19 +55,25 @@ void updateCurrentLayer(Color currentColor) {
 	} else if (isEraser) {
 		currentBrush.setColor(WHITE);
 		currentBrush.setSize(eraserThickness);
+	} else if (isFill) {
+		if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+			Vector2 mousePosition = GetMousePosition();
+			layers[currLayerIdx].fill(mousePosition, currentColor);
+		}
 	}
 
-	Vector2 mousePosition = GetMousePosition();
-	Vector2 mouseMovement = GetMouseDelta();
-
-	if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-		userStroke = Stroke(mousePosition, currentBrush);
-	} else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-		layers[currLayerIdx].drawStroke(userStroke);
-		userStroke = Stroke();
-	}
-	if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-		userStroke.update(mousePosition);
+	if (!isFill) {
+		Vector2 mousePosition = GetMousePosition();
+		Vector2 mouseMovement = GetMouseDelta();
+		if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+			userStroke = Stroke(mousePosition, currentBrush);
+		} else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+			layers[currLayerIdx].drawStroke(userStroke);
+			userStroke = Stroke();
+		}
+		if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+			userStroke.update(mousePosition);
+		}
 	}
 }
 
@@ -78,19 +90,17 @@ int main() {
 
 	buttonsGUI.addButton("pen", &isPen);
 	buttonsGUI.addButton("eraser", &isEraser);
-	// buttonsGUI.addButton("fill", &isFill);
+	buttonsGUI.addButton("fill", &isFill);
 
 	while (!WindowShouldClose()) {
 		// --- UPDATES --- //
 		handleKeyboardShortcuts();
 		buttonsGUI.updateButtons();
 		colorPickerGUI.update();
-		if (!colorPickerGUI.isWheelOpen())
+		if (!colorPickerGUI.isWheelOpen() && !CheckCollisionPointRec(GetMousePosition(), buttonsGUI.getTotalRectangle()))
 			updateCurrentLayer(colorPickerGUI.getSelectedColor());
 
 		// --- RENDERING --- //
-		for (Layer layer : layers)
-			layer.updateRenderTexture();
 		BeginDrawing();
 		ClearBackground(WHITE);
 		for (Layer layer : layers)

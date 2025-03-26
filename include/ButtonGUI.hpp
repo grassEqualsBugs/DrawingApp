@@ -17,6 +17,7 @@ class ButtonGUI {
 		ButtonGUI(int buttonSize, int iconSize, int buttonMargin, int screenHalfway);
 		~ButtonGUI();
 		void updateButtons();
+		Rectangle getTotalRectangle();
 		void addButton(std::string name, bool* buttonBool);
 		void render();
 };

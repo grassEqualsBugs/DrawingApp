@@ -57,4 +57,7 @@ namespace ColorUtils {
 
 	    return {h, s, v};
 	}
+	bool colorEqual(Color a, Color b) {
+		return a.r == b.r && a.g == b.g && a.b == b.b && a.a == b.a;
+	}
 }

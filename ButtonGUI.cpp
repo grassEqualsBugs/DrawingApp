@@ -38,11 +38,17 @@ void ButtonGUI::updateButtons() {
 	}
 }
 
+Rectangle ButtonGUI::getTotalRectangle() {
+	float totalSize = buttonSize * buttons.size() +
+		buttonMargin * (buttons.size() + 1);
+	return (Rectangle){15.f, (float)(screenHalfway - totalSize/2), (float)(buttonSize + buttonMargin) + 10, totalSize};
+}
+
 void ButtonGUI::render() {
 	float totalSize = buttonSize * buttons.size() +
 		buttonMargin * (buttons.size() + 1);
 	DrawRectangleRounded(
-		(Rectangle){15.f, (float)(screenHalfway - totalSize/2), (float)(buttonSize + buttonMargin) + 10, totalSize},
+		getTotalRectangle(),
 		0.8, 20, (Color){130,130,130,255});
 	for (int i = 0; i < buttons.size(); i++) {
 		float x = 20.f + (float)buttonMargin/2;

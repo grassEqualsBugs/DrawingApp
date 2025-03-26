@@ -7,6 +7,14 @@ Stroke::Stroke(Vector2 position, Brush brush) {
 	positions.push_back(position);
 }
 
+void Stroke::setBrush(Brush brush) {
+	Stroke::brush = brush;
+}
+
+Brush Stroke::getBrush() {
+	return brush;
+}
+
 void Stroke::update(Vector2 position) {
 	positions.push_back(position);
 }
