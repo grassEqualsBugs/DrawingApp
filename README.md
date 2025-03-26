@@ -19,5 +19,5 @@ A simple, extremely lightweight drawing application designed as an alternative t
 ## Building at Home
 
 1. Download the source code.
-2. Run `make` in the root directory (requires GNU make to be installed)
+2. Run `make` in the root directory (requires GNU make)
 3. Run `./DrawingApp` to start the application.
