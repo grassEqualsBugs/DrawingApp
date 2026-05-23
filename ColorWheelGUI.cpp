@@ -1,5 +1,5 @@
 #include "include/ColorWheelGUI.hpp"
-#include "include/raylib.h"
+#include "include/raylib/raylib.h"
 
 ColorWheelGUI::ColorWheelGUI(int width, int height, Vector2 position, Vector2 offset, Color color)
     : width(width), height(height), position(position), offset(offset), color(color)  {

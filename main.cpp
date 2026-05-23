@@ -1,5 +1,5 @@
 #include "include/ButtonGUI.hpp"
-#include "include/raylib.h"
+#include "include/raylib/raylib.h"
 #include "include/Stroke.hpp"
 #include "include/Layer.hpp"
 #include "include/ColorPickerGUI.hpp"

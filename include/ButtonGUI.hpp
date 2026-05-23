@@ -3,7 +3,7 @@
 #include <string>
 #include <utility>
 
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 class ButtonGUI {
 	private:

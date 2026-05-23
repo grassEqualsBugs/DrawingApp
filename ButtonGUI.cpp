@@ -1,5 +1,5 @@
 #include "include/ButtonGUI.hpp"
-#include "include/raylib.h"
+#include "include/raylib/raylib.h"
 
 ButtonGUI::ButtonGUI(int buttonSize, int iconSize, int buttonMargin, int screenHalfway) {
 	ButtonGUI::buttonSize = buttonSize;
